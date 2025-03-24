@@ -75,12 +75,12 @@ function resolveCollision(ball1, ball2) {
   ball2.vy += (v2n_after - v2n) * ny_norm * PHYSICS.RESTITUTION;
 
   // Koreksi posisi untuk menghindari overlapping
-  const overlap = ball1.radius + ball2.radius - dist;
+  const overlap = (ball1.radius + ball2.radius - dist) / 2;
   if (overlap > 0) {
-    ball1.x -= overlap * 0.5 * nx_norm;
-    ball1.y -= overlap * 0.5 * ny_norm;
-    ball2.x += overlap * 0.5 * nx_norm;
-    ball2.y += overlap * 0.5 * ny_norm;
+    ball1.x -= overlap * nx_norm;
+    ball1.y -= overlap * ny_norm;
+    ball2.x += overlap * nx_norm;
+    ball2.y += overlap * ny_norm;
   }
 
   // Hitung damage berdasarkan kecepatan relatif dan atribut bola
