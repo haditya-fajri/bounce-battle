@@ -129,7 +129,7 @@ function countCharRepetitions(str) {
 }
 
 // Menganalisis karakteristik nama untuk menentukan atribut dan passive ability
-function analyzeNameCharacteristics(name) {
+function analyzeNameCharacteristicsV2(name) {
   if (!name || name.length === 0) {
     return {
       powerScore: 60, // Nilai default minimum
@@ -222,7 +222,7 @@ function analyzeNameCharacteristics(name) {
 }
 
 // Menghitung distribusi atribut berdasarkan karakteristik nama
-function calculateAttributeDistribution(
+function calculateAttributeDistributionV2(
   name,
   nameHash,
   vowels,
