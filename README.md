@@ -1,102 +1,199 @@
 # Bounce Battle
 
-Bounce Battle adalah game simulasi di mana dua bola bertarung di dalam arena tertutup. Setiap bola memiliki atribut unik yang diacak berdasarkan nama yang diberikan.
+A physics-based simulation game where two balls compete in a shrinking arena. Each ball gets unique attributes and abilities based on its name.
 
-## Konsep Game
+![Bounce Battle Screenshot](assets/images/ui/screenshot.png)
 
-- 2 bola di dalam kotak tertutup
-- Bola saling memantul pada dinding kotak dan satu sama lain
-- Setiap tumbukan antar bola memberikan damage
-- Arena mengecil seiring berjalannya waktu untuk mempercepat pertempuran
-- Setiap permainan baru menghasilkan bola dengan atribut dan passive yang diacak berdasarkan nama bola
+## Overview
 
-## Fitur Utama
+Bounce Battle is a web-based game where two balls with unique abilities battle in an enclosed arena. The game features:
 
-- **Sistem Randomisasi Berbasis Nama**: Mengkonversi nama menjadi atribut dan kemampuan unik
-- **Passive Abilities**: Kemampuan khusus berdasarkan tier (Common, Uncommon, Rare, Epic, Legendary)
-- **Sistem Item**: Item spawn secara berkala dalam arena untuk memberikan efek khusus
-- **Sistem Comeback**: Mekanisme dinamis yang memberikan kesempatan bagi bola yang lebih lemah
-- **Arena Dinamis**: Arena yang mengecil seiring waktu untuk mempercepat pertandingan
+- A name-based attribute generation system where each name produces unique stats
+- Five tiers of passive abilities: Common, Uncommon, Rare, Epic, and Legendary
+- A comeback system that helps weaker balls remain competitive
+- Various power-ups and items that appear in the arena
+- A physics system with realistic collisions and interactions
+- A Hall of Fame to track game results
 
-## Teknologi
+## Getting Started
 
-- HTML5 Canvas untuk rendering
-- JavaScript vanilla untuk game logic
-- Matter.js untuk fisika
-- Howler.js untuk audio
-- CryptoJS untuk hashing nama
+1. Clone the repository
+2. Open `index.html` in a modern web browser
+3. Enter names for both balls
+4. Start the battle!
 
-## Setup Pengembangan
+## Game Mechanics
 
-1. Clone repository ini
+### Name-based Attributes
 
-   ```
-   git clone https://github.com/yourusername/bounce-battle.git
-   ```
+Each ball has four primary attributes derived from its name:
 
-2. Buka folder project
+- **HP**: Determines how much damage the ball can take
+- **Attack**: Affects how much damage the ball deals on collision
+- **Defense**: Reduces incoming damage
+- **Speed**: Affects how fast the ball moves
 
-   ```
-   cd bounce-battle
-   ```
+The name's characteristics affect these attributes:
 
-3. Buka `index.html` di browser Anda
+- Vowels increase HP and Defense
+- Consonants increase Attack and Speed
+- Special names (deities, mathematical terms) provide bonuses
+- Palindromes and other patterns boost overall power
 
-4. Untuk pengembangan lebih lanjut, Anda dapat menggunakan live server
-   ```
-   npx live-server
-   ```
+### Passive Abilities
 
-## Struktur Project
+Each ball receives a passive ability based on its name and tier:
+
+- **Common**: Basic abilities with minor effects (50% chance)
+- **Uncommon**: More powerful abilities with unique mechanics (30% chance)
+- **Rare**: Strong abilities with significant advantages/disadvantages (15% chance)
+- **Epic**: Very powerful abilities that can change gameplay drastically (4% chance)
+- **Legendary**: Game-changing abilities that can turn the tide of battle (1% chance)
+
+### Item System
+
+Items spawn randomly in the arena and provide temporary effects when collected:
+
+- **Attribute Items**: Boost basic attributes (attack, defense, speed, health)
+- **Special Effect Items**: Provide unique effects like damage reflection or invisibility
+- **Arena Manipulation Items**: Create gravity wells, vortexes, or slick areas
+- **Super Items**: Rare and powerful items that can dramatically change battle dynamics
+
+### Comeback System
+
+To keep matches competitive, the game features a comeback system that activates when:
+
+- There's a significant power difference between balls
+- The match has been ongoing for at least 30 seconds
+
+Comeback effects include:
+
+- Progressive damage boost for the weaker ball
+- Damage reduction for the weaker ball
+- Increased speed after successful hits
+- Critical hit chance
+- Better item luck
+
+## Project Structure
 
 ```
 bounce-battle/
 │
-├── index.html                  # File utama HTML
-├── favicon.ico                 # Ikon website
+├── index.html                  # Main HTML file
+├── favicon.ico                 # Website icon
 │
-├── assets/                     # Aset game
-│   ├── audio/                  # File audio
-│   ├── images/                 # Gambar dan sprite
-│   └── fonts/                  # Font custom
+├── assets/                     # Game assets
+│   ├── audio/                  # Audio files
+│   ├── images/                 # Images and sprites
+│   └── fonts/                  # Custom fonts
 │
-├── css/                        # Style sheets
-│   ├── main.css                # Style utama
-│   ├── ui.css                  # Style untuk UI
-│   └── animations.css          # Definisi animasi
+├── css/                        # Stylesheets
+│   ├── main.css                # Main styles
+│   ├── ui.css                  # UI styles
+│   └── animations.css          # Animation definitions
 │
 ├── js/                         # JavaScript files
-│   ├── main.js                 # File utama, inisialisasi game
-│   ├── engine/                 # Core engine (physics, renderer, loop)
-│   ├── game/                   # Game logic (ball, arena, item, collision)
-│   ├── systems/                # Game systems (nameGenerator, passiveAbility, etc.)
-│   ├── utils/                  # Utilities (hash, math, vector, random)
-│   └── ui/                     # UI components
+│   ├── main.js                 # Main game logic
+│   │
+│   ├── engine/                 # Game engine
+│   │   ├── physics.js          # Physics system
+│   │   ├── renderer.js         # Canvas rendering
+│   │   └── loop.js             # Game loop
+│   │
+│   ├── game/                   # Game components
+│   │   ├── ball.js             # Ball class
+│   │   ├── arena.js            # Arena class
+│   │   ├── item.js             # Item system
+│   │   └── collision.js        # Collision handling
+│   │
+│   ├── systems/                # Game systems
+│   │   ├── nameGenerator.js    # Name analysis
+│   │   ├── passiveAbility.js   # Passive abilities
+│   │   ├── comebackSystem.js   # Comeback mechanism
+│   │   ├── itemSpawner.js      # Item spawning
+│   │   └── storage.js          # Local storage
+│   │
+│   ├── utils/                  # Utilities
+│   │   ├── hash.js             # Name hashing
+│   │   ├── math.js             # Math helpers
+│   │   ├── vector.js           # Vector operations
+│   │   └── random.js           # RNG utilities
+│   │
+│   ├── ui/                     # UI components
+│   │   ├── menu.js             # Menu handling
+│   │   └── ...                 # Other UI modules
+│   │
+│   └── test/                   # Tests
+│       └── integrationTest.js  # Integration testing
 │
-├── lib/                        # Third-party libraries
-│
-└── README.md                   # Dokumentasi project
+└── lib/                        # Third-party libraries
+    ├── matter.min.js           # Physics library
+    ├── howler.min.js           # Audio library
+    └── crypto-js.min.js        # For name hashing
 ```
 
-## Kontribusi
+## Customization
 
-Kontribusi sangat diterima! Jika Anda ingin berkontribusi:
+### Adding New Passive Abilities
 
-1. Fork repository
-2. Buat branch fitur (`git checkout -b feature/AmazingFeature`)
-3. Commit perubahan Anda (`git commit -m 'Add some AmazingFeature'`)
-4. Push ke branch (`git push origin feature/AmazingFeature`)
-5. Buka Pull Request
+Add new passive abilities in `js/systems/passiveAbility.js`:
 
-## Lisensi
+```javascript
+// Example: Adding a new Epic tier passive
+PASSIVE_ABILITIES.Epic.push({
+  name: "Time Warp",
+  description: "Periodically slows time for all other entities",
+  onInit: function (ball) {
+    ball.timeWarpCooldown = 0;
+  },
+  onUpdate: function (ball, deltaTime, opponents) {
+    // Implementation
+  },
+  onCollision: null,
+});
+```
 
-Distributed under the MIT License. See `LICENSE` for more information.
+### Adding New Items
 
-## Pengembang
+Add new items in `js/game/item.js`:
 
-Nama Anda - [GitHub](https://github.com/yourusername)
+```javascript
+// Example: Adding a new Arena manipulation item
+ITEMS.ARENA.push({
+  id: "time_bubble",
+  name: "Time Bubble",
+  description: "Creates a zone where time flows differently",
+  color: "#3399ff",
+  icon: "⏱️",
+  effect: function (ball, opponents, arena) {
+    // Implementation
+  },
+});
+```
 
-## Acknowledgments
+### Modifying the Comeback System
 
-- Terima kasih kepada Matter.js, Howler.js, dan CryptoJS untuk libraries yang luar biasa
-- Inspirasi dari berbagai battler games dan simulasi fisika
+Adjust comeback mechanics in `js/systems/comebackSystem.js`:
+
+```javascript
+// Example: Change the minimum power difference required
+COMEBACK.MIN_POWER_DIFF = 40; // Default is 50
+```
+
+## Browser Compatibility
+
+Bounce Battle works in all modern browsers that support:
+
+- HTML5 Canvas
+- ES6 JavaScript
+- LocalStorage
+
+## License
+
+MIT License - See LICENSE file for details
+
+## Credits
+
+- Physics calculations inspired by [Matter.js](https://brm.io/matter-js/)
+- Name analysis algorithm concepts from various procedural generation techniques
+- Special thanks to all testers and contributors

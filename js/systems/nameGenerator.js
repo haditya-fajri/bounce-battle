@@ -81,43 +81,101 @@ const NAME_GENERATOR = {
  * @returns {Object} Hasil analisis dengan atribut, tier passive ability, dan power score
  */
 function analyzeNameCharacteristics(name) {
-  // Default values jika nama kosong
-  if (!name || name.trim().length === 0) {
-    return getDefaultCharacteristics();
+  // Default values if name is empty or invalid
+  if (!name || typeof name !== "string" || name.trim().length === 0) {
+    return {
+      powerScore: 100,
+      attributes: {
+        hp: 25,
+        attack: 25,
+        defense: 25,
+        speed: 25,
+      },
+      passiveTier: "Common",
+      nameFactors: {},
+    };
   }
 
-  // Normalisasi nama
-  const normalizedName = name.trim();
+  try {
+    // Normalize the name
+    const normalizedName = name.trim();
 
-  // Konversi nama menjadi hash number menggunakan algoritma hash
-  const nameHash = generateNameHash(normalizedName);
+    // Convert the name to a hash number
+    const nameHash = generateNameHash(normalizedName);
 
-  // Hitung faktor nama (jumlah vokal, konsonan, dll)
-  const nameFactors = calculateNameFactors(normalizedName);
+    // Calculate name factors
+    const nameFactors = calculateNameFactors(normalizedName);
 
-  // Hitung kualitas nama berdasarkan pola khusus
-  const nameQuality = calculateNameQuality(normalizedName, nameFactors);
+    // Calculate name quality
+    const nameQuality = calculateNameQuality(normalizedName, nameFactors);
 
-  // Tentukan power score berdasarkan kualitas nama
-  const powerScore = calculatePowerScore(nameQuality, nameFactors);
+    // Determine power score
+    const powerScore = calculatePowerScore(nameQuality, nameFactors);
 
-  // Distribusikan atribut berdasarkan karakteristik nama
-  const attributes = calculateAttributeDistribution(
-    normalizedName,
-    nameHash,
-    nameFactors,
-    powerScore
-  );
+    // Calculate attribute distribution
+    const attributes = calculateAttributeDistribution(
+      normalizedName,
+      nameHash,
+      nameFactors,
+      powerScore
+    );
 
-  // Tentukan tier passive ability berdasarkan kualitas nama
-  const passiveTier = determinePassiveTier(nameQuality, nameFactors);
+    // Determine passive ability tier
+    const passiveTier = determinePassiveTier(nameQuality, nameFactors);
 
-  return {
-    powerScore: powerScore,
-    attributes: attributes,
-    passiveTier: passiveTier,
-    nameFactors: nameFactors,
+    return {
+      powerScore,
+      attributes,
+      passiveTier,
+      nameFactors,
+    };
+  } catch (error) {
+    console.error("Error in analyzeNameCharacteristics:", error);
+
+    // Return safe default values if an error occurs
+    return {
+      powerScore: 100,
+      attributes: {
+        hp: 25,
+        attack: 25,
+        defense: 25,
+        speed: 25,
+      },
+      passiveTier: "Common",
+      nameFactors: {},
+    };
+  }
+}
+
+function fixNameGeneratorOutput() {
+  // Store the original function
+  const originalFunction = window.NameGenerator.analyzeNameCharacteristics;
+
+  // Replace with a fixed version
+  window.NameGenerator.analyzeNameCharacteristics = function (name) {
+    // Call the original function
+    const result = originalFunction(name);
+
+    // Fix the attributes if they're null
+    if (
+      !result.attributes ||
+      result.attributes.hp === null ||
+      result.attributes.attack === null ||
+      result.attributes.defense === null ||
+      result.attributes.speed === null
+    ) {
+      result.attributes = {
+        hp: 25,
+        attack: 25,
+        defense: 25,
+        speed: 25,
+      };
+    }
+
+    return result;
   };
+
+  console.log("NameGenerator output fix applied");
 }
 
 /**
@@ -376,19 +434,22 @@ function calculateAttributeDistribution(name, nameHash, factors, powerScore) {
   // Basis distribusi dari hash
   const hashMod = nameHash % 100;
 
-  // Base values
+  // Base values - ensure we start with numbers, not null values
   let hp = 25;
   let attack = 25;
   let defense = 25;
   let speed = 25;
 
+  // Safety check for division by zero
+  const nameLength = Math.max(1, name.length);
+
   // Pengaruh vokal (meningkatkan HP dan Defense)
-  const vowelFactor = factors.vowels / name.length;
+  const vowelFactor = factors.vowels / nameLength;
   hp += vowelFactor * 20;
   defense += vowelFactor * 15;
 
   // Pengaruh konsonan (meningkatkan Attack dan Speed)
-  const consonantFactor = factors.consonants / name.length;
+  const consonantFactor = factors.consonants / nameLength;
   attack += consonantFactor * 20;
   speed += consonantFactor * 15;
 
@@ -430,39 +491,33 @@ function calculateAttributeDistribution(name, nameHash, factors, powerScore) {
 
   // Pengaruh kata khusus
   if (factors.hasSpecialWord) {
-    // Cek kata khusus mana yang ada
-    for (let word of NAME_GENERATOR.SPECIAL_WORDS) {
-      if (name.toLowerCase().includes(word)) {
-        // Berbeda kata khusus memberi boost ke attribute yang berbeda
-        if (["zeus", "thor", "odin", "ares"].includes(word)) {
-          attack += 10; // Dewa perang/petir -> attack boost
-        } else if (["gaia", "atlas", "titan", "hulk"].includes(word)) {
-          hp += 10; // Dewa bumi/titan -> HP boost
-        } else if (["athena", "shield", "guard"].includes(word)) {
-          defense += 10; // Dewa kebijaksanaan/pelindung -> defense boost
-        } else if (["flash", "sonic", "dash", "swift", "bolt"].includes(word)) {
-          speed += 10; // Kata kecepatan -> speed boost
-        } else {
-          // Kata khusus lainnya, boost semua atribut sedikit
-          hp += 3;
-          attack += 3;
-          defense += 3;
-          speed += 3;
-        }
-        break; // Hanya ambil pengaruh dari satu kata khusus
-      }
-    }
+    // Default boost if no specific word match
+    hp += 5;
+    attack += 5;
+    defense += 5;
+    speed += 5;
   }
 
-  // Sesuaikan berdasarkan power score
-  const powerFactor = powerScore / NAME_GENERATOR.POWER_SCORE.normal;
+  // Ensure no negative values
+  hp = Math.max(10, hp);
+  attack = Math.max(10, attack);
+  defense = Math.max(10, defense);
+  speed = Math.max(10, speed);
+
+  // Sesuaikan berdasarkan power score - ensure power score is a valid number
+  const powerFactor = (powerScore || 100) / 100;
   hp *= powerFactor;
   attack *= powerFactor;
   defense *= powerFactor;
   speed *= powerFactor;
 
-  // Normalisasi total menjadi 100%
+  // Normalisasi total menjadi 100% - ensure the total is not zero
   const total = hp + attack + defense + speed;
+  if (total <= 0) {
+    // Default distribution if something went wrong
+    return { hp: 25, attack: 25, defense: 25, speed: 25 };
+  }
+
   hp = Math.round((hp / total) * 100);
   attack = Math.round((attack / total) * 100);
   defense = Math.round((defense / total) * 100);
@@ -475,6 +530,12 @@ function calculateAttributeDistribution(name, nameHash, factors, powerScore) {
   } else if (adjustedTotal > 100) {
     hp -= adjustedTotal - 100;
   }
+
+  // Final safety check to ensure valid values
+  hp = isNaN(hp) ? 25 : hp;
+  attack = isNaN(attack) ? 25 : attack;
+  defense = isNaN(defense) ? 25 : defense;
+  speed = isNaN(speed) ? 25 : speed;
 
   return { hp, attack, defense, speed };
 }
@@ -579,3 +640,7 @@ window.NameGenerator = {
   generateBallColor,
   CONSTANTS: NAME_GENERATOR,
 };
+
+window.addEventListener("load", function () {
+  fixNameGeneratorOutput();
+});
