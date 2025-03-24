@@ -1,0 +1,130 @@
+/* Animasi untuk berbagai elemen */
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes flash {
+  0%,
+  50%,
+  100% {
+    opacity: 1;
+  }
+  25%,
+  75% {
+    opacity: 0.5;
+  }
+}
+
+/* Animasi untuk judul */
+h1 {
+  animation: pulse 2s infinite ease-in-out;
+}
+
+/* Animasi untuk menu muncul */
+#menu-screen {
+  animation: fadeIn 0.8s ease-out;
+}
+
+/* Animasi untuk ball-info */
+#ball1-info {
+  animation: slideInLeft 0.5s ease-out;
+}
+
+#ball2-info {
+  animation: slideInRight 0.5s ease-out;
+}
+
+/* Animasi untuk hasil pertandingan */
+#winner-display {
+  animation: bounce 1s ease-in-out;
+}
+
+/* Animasi untuk item yang muncul */
+.item {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Animasi untuk efek kritis */
+.critical-hit {
+  animation: flash 0.5s;
+}
+
+/* Animasi loading/processing */
+.loading-indicator {
+  animation: rotate 1.5s linear infinite;
+}
+
+/* Animasi untuk hover pada button */
+.menu-btn:hover,
+.game-btn:hover {
+  animation: pulse 1s infinite ease-in-out;
+}
+
+/* Animasi untuk transisi antar layar */
+.screen.active {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Animasi untuk bola preview */
+.ball-preview:hover {
+  animation: pulse 1.5s infinite ease-in-out;
+}

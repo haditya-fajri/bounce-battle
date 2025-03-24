@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bounce Battle - Game Simulasi Bola Memantul</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/ui.css" />
+    <link rel="stylesheet" href="css/animations.css" />
+  </head>
+  <body>
+    <div id="game-container">
+      <div id="menu-screen" class="screen">
+        <h1>Bounce Battle</h1>
+        <div id="main-menu">
+          <button id="start-game-btn" class="menu-btn">Mulai Game</button>
+          <button id="hall-of-fame-btn" class="menu-btn">Hall of Fame</button>
+          <button id="about-btn" class="menu-btn">Tentang</button>
+        </div>
+      </div>
+
+      <div id="setup-screen" class="screen hidden">
+        <h2>Siapkan Bola</h2>
+        <div id="ball-setup-container">
+          <div class="ball-setup">
+            <h3>Bola 1</h3>
+            <input
+              type="text"
+              id="ball1-name"
+              class="ball-name-input"
+              placeholder="Masukkan nama untuk bola 1"
+            />
+            <div id="ball1-preview" class="ball-preview"></div>
+            <div id="ball1-stats" class="stats-display"></div>
+          </div>
+          <div class="ball-setup">
+            <h3>Bola 2</h3>
+            <input
+              type="text"
+              id="ball2-name"
+              class="ball-name-input"
+              placeholder="Masukkan nama untuk bola 2"
+            />
+            <div id="ball2-preview" class="ball-preview"></div>
+            <div id="ball2-stats" class="stats-display"></div>
+          </div>
+        </div>
+        <button id="start-battle-btn" class="menu-btn">
+          Mulai Pertandingan
+        </button>
+        <button id="back-to-menu-btn" class="menu-btn">Kembali</button>
+      </div>
+
+      <div id="game-screen" class="screen hidden">
+        <canvas id="game-canvas"></canvas>
+        <div id="game-ui">
+          <div id="ball1-info" class="ball-info">
+            <div class="ball-name"></div>
+            <div class="health-bar"></div>
+            <div class="passive-ability"></div>
+          </div>
+          <div id="ball2-info" class="ball-info">
+            <div class="ball-name"></div>
+            <div class="health-bar"></div>
+            <div class="passive-ability"></div>
+          </div>
+          <div id="timer">00:00</div>
+          <button id="pause-btn" class="game-btn">Pause</button>
+        </div>
+      </div>
+
+      <div id="result-screen" class="screen hidden">
+        <h2>Hasil Pertandingan</h2>
+        <div id="winner-display"></div>
+        <div id="match-stats"></div>
+        <button id="play-again-btn" class="menu-btn">Main Lagi</button>
+        <button id="back-to-menu-result-btn" class="menu-btn">
+          Kembali ke Menu
+        </button>
+      </div>
+
+      <div id="hall-of-fame-screen" class="screen hidden">
+        <h2>Hall of Fame</h2>
+        <div id="hall-of-fame-list"></div>
+        <button id="back-from-hall-btn" class="menu-btn">Kembali</button>
+      </div>
+
+      <div id="about-screen" class="screen hidden">
+        <h2>Tentang Bounce Battle</h2>
+        <div id="about-content">
+          <p>
+            Bounce Battle adalah game simulasi di mana dua bola bertarung di
+            dalam arena tertutup.
+          </p>
+          <p>
+            Setiap bola memiliki atribut unik yang diacak berdasarkan nama yang
+            diberikan.
+          </p>
+          <p>
+            Bola akan memantul di dinding arena dan saling bertabrakan, dengan
+            setiap tabrakan memberikan damage.
+          </p>
+          <p>Kumpulkan item untuk mendapatkan keunggulan dalam pertarungan!</p>
+        </div>
+        <button id="back-from-about-btn" class="menu-btn">Kembali</button>
+      </div>
+    </div>
+
+    <!-- Libraries -->
+    <script src="lib/matter.min.js"></script>
+    <script src="lib/howler.min.js"></script>
+    <script src="lib/crypto-js.min.js"></script>
+
+    <!-- Game Engine -->
+    <script src="js/engine/physics.js"></script>
+    <script src="js/engine/renderer.js"></script>
+    <script src="js/engine/loop.js"></script>
+
+    <!-- Game Logic -->
+    <script src="js/game/ball.js"></script>
+    <script src="js/game/arena.js"></script>
+    <script src="js/game/item.js"></script>
+    <script src="js/game/collision.js"></script>
+
+    <!-- Game Systems -->
+    <script src="js/systems/nameGenerator.js"></script>
+    <script src="js/systems/passiveAbility.js"></script>
+    <script src="js/systems/comebackSystem.js"></script>
+    <script src="js/systems/itemSpawner.js"></script>
+    <script src="js/systems/storage.js"></script>
+
+    <!-- Utilities -->
+    <script src="js/utils/hash.js"></script>
+    <script src="js/utils/math.js"></script>
+    <script src="js/utils/vector.js"></script>
+    <script src="js/utils/random.js"></script>
+
+    <!-- UI Components -->
+    <script src="js/ui/menu.js"></script>
+    <script src="js/ui/nameInput.js"></script>
+    <script src="js/ui/statsDisplay.js"></script>
+    <script src="js/ui/gameStats.js"></script>
+    <script src="js/ui/hallOfFame.js"></script>
+
+    <!-- Main JS -->
+    <script src="js/main.js"></script>
+  </body>
+</html>
